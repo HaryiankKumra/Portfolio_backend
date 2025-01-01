@@ -11,8 +11,22 @@ dotenv.config(); // Load environment variables
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Define allowed origins for CORS
+const allowedOrigins = [
+  '*'
+];
+
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: function(origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true); // Allow request
+    } else {
+      callback(new Error('Not allowed by CORS')); // Deny request
+    }
+  }
+}));
+
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), './'))); // Serve static files
 
