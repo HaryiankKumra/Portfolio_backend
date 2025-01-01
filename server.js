@@ -13,7 +13,8 @@ const PORT = process.env.PORT || 3000;
 
 // Define allowed origins for CORS
 const allowedOrigins = [
-  '*'
+  'https://haryiankkumra.vercel.app', // Allow the frontend deployed on Vercel
+  'http://127.0.0.1:5500',            // Allow local development
 ];
 
 // Middleware
@@ -24,7 +25,10 @@ app.use(cors({
     } else {
       callback(new Error('Not allowed by CORS')); // Deny request
     }
-  }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'], // Explicitly allow necessary HTTP methods
+  preflightContinue: false,  // Don't pass control to the next middleware
+  optionsSuccessStatus: 200, // For legacy browser support
 }));
 
 app.use(express.json());
@@ -129,7 +133,6 @@ app.post('/api/chatbot', async (req, res) => {
     console.log('Received message:', message);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const response = await model.generateContent(message); // Just pass the message directly
-    
 
     const reply = response?.generated_text || 'Sorry, I could not understand your message.';
     console.log('Generated response:', reply);
