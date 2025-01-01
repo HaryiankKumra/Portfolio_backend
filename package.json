@@ -1,0 +1,36 @@
+{
+  "name": "final",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Final.js",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "env": "^0.0.2",
+    "express": "^4.21.2",
+    "mongodb": "^5.x.x",
+    "mongoose": "^8.9.2",
+    "node-fetch": "^2.7.0",
+    "nodemailer": "^6.9.16"
+  },
+  "vercel": {
+    "functions": {
+      "api/contact.js": {
+        "runtime": "vercel-node@22.x"
+      }
+    }
+  }
+}
