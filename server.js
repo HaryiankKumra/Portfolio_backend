@@ -21,29 +21,28 @@ app.use((req, res, next) => {
   ];
 
   const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin) || !origin) {
-    res.setHeader('Access-Control-Allow-Origin', origin || '*'); // Allow specific origins or all origins
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // Specify allowed methods
+
+  if (!origin || allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin || allowedOrigins[0]);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader(
       'Access-Control-Allow-Headers',
       'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization'
-    ); // Specify allowed headers
+    );
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Max-Age', '86400'); // Cache preflight response for 1 day
 
     if (req.method === 'OPTIONS') {
-      res.status(204).end(); // Respond with no content for preflight requests
+      res.status(204).end(); // Send a proper response for preflight
       return;
     }
   } else {
-    res.status(403).send('CORS policy does not allow this origin'); // Deny request if origin is not allowed
+    res.status(403).json({ error: 'CORS not allowed from this origin' });
+    return;
   }
 
   next();
 });
-
-// Middleware to parse JSON
-app.use(express.json());
-app.use(express.static(path.join(process.cwd(), './'))); // Serve static files
 
 // MongoDB Connection
 mongoose
