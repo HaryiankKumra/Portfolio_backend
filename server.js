@@ -12,37 +12,36 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 
-// Middleware
-const allowedOrigins = [
-  'https://haryiankkumra.vercel.app', // Deployed frontend
-  'http://127.0.0.1:5500',            // Local development
-];
 
-// CORS middleware
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests from allowed origins or no origin (e.g., Postman)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS not allowed'));
+// Middleware for CORS
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    'https://haryiankkumra.vercel.app', // Deployed frontend
+    'http://127.0.0.1:5500',            // Local development
+  ];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin) || !origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*'); // Allow specific origins or all origins
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // Specify allowed methods
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization'
+    ); // Specify allowed headers
+    res.setHeader('Access-Control-Max-Age', '86400'); // Cache preflight response for 1 day
+
+    if (req.method === 'OPTIONS') {
+      res.status(204).end(); // Respond with no content for preflight requests
+      return;
     }
-  },
-  methods: ['GET', 'POST', 'OPTIONS'],         // Explicitly allow these methods
-  allowedHeaders: ['Content-Type'],           // Allow specific headers
-  credentials: true,                          // Allow cookies and credentials
-  optionsSuccessStatus: 204,                  // Ensure preflight response succeeds
-}));
+  } else {
+    res.status(403).send('CORS policy does not allow this origin'); // Deny request if origin is not allowed
+  }
 
-// Handle preflight `OPTIONS` requests
-app.options('*', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || allowedOrigins[0]);
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.status(204).end(); // Respond with no content for preflight
+  next();
 });
 
+// Middleware to parse JSON
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), './'))); // Serve static files
 
