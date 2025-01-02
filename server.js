@@ -16,19 +16,22 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
 
 // Log Incoming Requests
-const allowedOrigins = [
-  'https://haryiankkumra.vercel.app', // Frontend URL
-  'https://portfolio-backend-zeta-orcin.vercel.app', // Backend (for API calls from itself, if needed)
-];
+const allowedOrigins = ['https://haryiankkumra.vercel.app', 'http://127.0.0.1:5500'];
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
-    return res.status(204).end();
+    console.log('Handling OPTIONS request');
+    return res.status(204).end(); // Terminate the request with a 204 status
   }
 
   next();
@@ -36,9 +39,10 @@ app.use((req, res, next) => {
 
 
 
+
 // MongoDB Connection
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB successfully!'))
   .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
