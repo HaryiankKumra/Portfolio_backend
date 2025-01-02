@@ -17,8 +17,8 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bo
 
 // Log Incoming Requests
 const allowedOrigins = [
-  'https://haryiankkumra.vercel.app/', // Hosted frontend
-  'http://127.0.0.1:5500', // For local testing
+  'https://haryiankkumra.vercel.app', // Frontend URL
+  'https://portfolio-backend-zeta-orcin.vercel.app', // Backend (for API calls from itself, if needed)
 ];
 
 app.use((req, res, next) => {
