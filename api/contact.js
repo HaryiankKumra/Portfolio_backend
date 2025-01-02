@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { connectToDatabase } from '../lib/mongodb'; // Ensure this file exists and works
+// import { connectToDatabase } from '../lib/mongodb'; // Ensure this file exists and works
 
 const contactSchema = new mongoose.Schema({
   name: { type: String, required: true },
