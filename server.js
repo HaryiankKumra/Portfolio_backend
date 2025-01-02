@@ -13,10 +13,6 @@ const PORT = process.env.PORT || 3000;
 
 
 
-const allowedOrigins = [
-  'http://127.0.0.1:5500',
-  'https://haryiankkumra.vercel.app',
-];
 app.use((req, _res, next) => {
   console.log(`[CORS] Origin: ${req.headers.origin}`);
   console.log(`[CORS] Method: ${req.method}`);
@@ -25,9 +21,9 @@ app.use((req, _res, next) => {
 });
 
 app.use((req, res, next) => {
+  const allowedOrigins = ['http://127.0.0.1:5500', 'https://haryiankkumra.vercel.app'];
   const origin = req.headers.origin;
 
-  // Dynamically allow the origin
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -37,13 +33,13 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
-    // Respond to preflight request
-    res.status(204).end();
-    return;
+    console.log('Handling OPTIONS request');
+    return res.status(204).end(); // Respond with 204 for preflight
   }
 
   next();
 });
+
 
 
 
