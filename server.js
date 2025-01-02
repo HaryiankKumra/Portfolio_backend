@@ -33,9 +33,9 @@ mongoose
 
 // Contact Form Schema
 const contactSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  message: { type: String, required: true },
+  name: { type: String, required: false },
+  email: { type: String, required: false },
+  message: { type: String, required: false },
   submittedAt: { type: Date, default: Date.now },
 });
 
