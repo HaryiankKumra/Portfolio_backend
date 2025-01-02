@@ -13,30 +13,34 @@ const PORT = process.env.PORT || 3000;
 
 
 // Middleware
+const allowedOrigins = [
+  'https://haryiankkumra.vercel.app', // Deployed frontend
+  'http://127.0.0.1:5500',            // Local development
+];
+
+// CORS middleware
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = [
-      '*'            // Allow local development
-    ];
-
     // Allow requests from allowed origins or no origin (e.g., Postman)
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow the request
+      callback(null, true);
     } else {
-      callback(new Error('CORS not allowed')); // Block the request
+      callback(new Error('CORS not allowed'));
     }
   },
-  methods: ['GET', 'POST', 'OPTIONS'], // Allow specific HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allow custom headers
-  credentials: true, // Allow credentials like cookies if needed
+  methods: ['GET', 'POST', 'OPTIONS'],         // Explicitly allow these methods
+  allowedHeaders: ['Content-Type'],           // Allow specific headers
+  credentials: true,                          // Allow cookies and credentials
+  optionsSuccessStatus: 204,                  // Ensure preflight response succeeds
 }));
 
+// Handle preflight `OPTIONS` requests
 app.options('*', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || allowedOrigins[0]);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.status(204).end(); // Respond with no content
+  res.status(204).end(); // Respond with no content for preflight
 });
 
 app.use(express.json());
