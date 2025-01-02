@@ -15,13 +15,10 @@ const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = [
   'https://haryiankkumra.vercel.app', 
-  'http://127.0.0.1:5500'
+  'http://127.0.0.1:5500',
 ];
 
 app.use((req, res, next) => {
-  console.log(`CORS Middleware: ${req.method} ${req.path}`);
-  console.log('Origin:', req.headers.origin);
-
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
@@ -31,13 +28,14 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
-    console.log('Handling preflight OPTIONS request');
+    // Preflight request handling
     res.status(204).end();
     return;
   }
 
   next();
 });
+
 
 
 // MongoDB Connection
