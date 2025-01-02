@@ -12,23 +12,20 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Define allowed origins for CORS
-const allowedOrigins = [
-  'https://haryiankkumra.vercel.app', // Allow the frontend deployed on Vercel
-  'http://127.0.0.1:5500',            // Allow local development
-];
+app.options('*', cors());
 
 // Middleware
 app.use(cors({
   origin: function(origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true); // Allow request
-    } else {
-      callback(new Error('Not allowed by CORS')); // Deny request
-    }
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+          callback(null, true);
+      } else {
+          callback(new Error('Not allowed by CORS'));
+      }
   },
-  methods: ['GET', 'POST', 'OPTIONS'], // Explicitly allow necessary HTTP methods
-  preflightContinue: false,  // Don't pass control to the next middleware
-  optionsSuccessStatus: 200, // For legacy browser support
+  methods: ['GET', 'POST', 'OPTIONS'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200,
 }));
 
 app.use(express.json());
