@@ -13,11 +13,31 @@ const PORT = process.env.PORT || 3000;
 
 
 // Middleware
-app.use(cors(
-  {
-    origin:"*"
-  }
-));
+app.use(cors({
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      '*'            // Allow local development
+    ];
+
+    // Allow requests from allowed origins or no origin (e.g., Postman)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error('CORS not allowed')); // Block the request
+    }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'], // Allow specific HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow custom headers
+  credentials: true, // Allow credentials like cookies if needed
+}));
+
+app.options('*', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.status(204).end(); // Respond with no content
+});
 
 app.use(express.json());
 app.use(express.static(path.join(process.cwd(), './'))); // Serve static files
