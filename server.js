@@ -13,36 +13,26 @@ const PORT = process.env.PORT || 3000;
 
 
 
-// Middleware for CORS
-app.use((req, res, next) => {
-  const allowedOrigins = [
-    'https://haryiankkumra.vercel.app', // Deployed frontend
-    'http://127.0.0.1:5500',            // Local development
-  ];
+import cors from 'cors';
 
-  const origin = req.headers.origin;
+const allowedOrigins = [
+  'https://haryiankkumra.vercel.app',
+  'http://127.0.0.1:5500',
+];
 
-  if (!origin || allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin || allowedOrigins[0]);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization'
-    );
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Max-Age', '86400'); // Cache preflight response for 1 day
-
-    if (req.method === 'OPTIONS') {
-      res.status(204).end(); // Send a proper response for preflight
-      return;
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-  } else {
-    res.status(403).json({ error: 'CORS not allowed from this origin' });
-    return;
-  }
-
-  next();
-});
+  },
+  methods: 'GET,POST,OPTIONS',
+  allowedHeaders: 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  credentials: true,
+  optionsSuccessStatus: 204, // For legacy browsers
+}));
 
 // MongoDB Connection
 mongoose
