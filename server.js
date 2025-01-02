@@ -22,28 +22,18 @@ const allowedOrigins = [
 ];
 
 app.use((req, res, next) => {
-  try {
-    const origin = req.headers.origin;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
-    }
-
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    if (req.method === 'OPTIONS') {
-      console.log('Handling OPTIONS request');
-      return res.status(204).end();
-    }
-
-    next();
-  } catch (error) {
-    console.error('CORS Middleware Error:', error);
-    res.status(500).send('Internal Server Error');
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
   }
+
+  next();
 });
+
 
 
 // MongoDB Connection
