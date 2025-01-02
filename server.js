@@ -13,26 +13,27 @@ const PORT = process.env.PORT || 3000;
 
 
 
-import cors from 'cors';
-
 const allowedOrigins = [
-  'https://haryiankkumra.vercel.app',
-  'http://127.0.0.1:5500',
+  'https://haryiankkumra.vercel.app', 
+  'http://127.0.0.1:5500'
 ];
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: 'GET,POST,OPTIONS',
-  allowedHeaders: 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Authorization',
-  credentials: true,
-  optionsSuccessStatus: 204, // For legacy browsers
-}));
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).end();
+    return;
+  }
+
+  next();
+});
 
 // MongoDB Connection
 mongoose
