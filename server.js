@@ -19,6 +19,9 @@ const allowedOrigins = [
 ];
 
 app.use((req, res, next) => {
+  console.log(`CORS Middleware: ${req.method} ${req.path}`);
+  console.log('Origin:', req.headers.origin);
+
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
@@ -28,12 +31,14 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
+    console.log('Handling preflight OPTIONS request');
     res.status(204).end();
     return;
   }
 
   next();
 });
+
 
 // MongoDB Connection
 mongoose
