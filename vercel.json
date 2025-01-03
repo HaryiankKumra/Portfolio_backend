@@ -10,12 +10,9 @@
       ]
     }
   ],
-  
-    "functions": {
-      "api/**/*.js": {
-        "includeFiles": ["node_modules/mongodb/**/*"]
-      }
+  "functions": {
+    "api/contact.js": {
+      "runtime": "nodejs20.x"
     }
-  
-  
+  }
 }
