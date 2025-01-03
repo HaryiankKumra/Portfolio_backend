@@ -5,7 +5,8 @@
     "node": "22.x"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+       "postinstall": "# npm install"
   },
   "type": "module",
   "dependencies": {

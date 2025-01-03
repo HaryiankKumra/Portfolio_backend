@@ -9,5 +9,13 @@
         { "key": "Access-Control-Allow-Credentials", "value": "true" }
       ]
     }
-  ]
+  ],
+  
+    "functions": {
+      "api/**/*.js": {
+        "includeFiles": ["node_modules/mongodb/**/*"]
+      }
+    }
+  
+  
 }
