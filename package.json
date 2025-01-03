@@ -6,7 +6,7 @@
   },
   "scripts": {
     "start": "node server.js",
-       "postinstall": "# npm install"
+    "postinstall": "npm install"
   },
   "type": "module",
   "dependencies": {
@@ -18,12 +18,5 @@
     "mongodb": "^5.9.2",
     "mongoose": "^8.9.2",
     "nodemailer": "^6.9.16"
-  },
-  "vercel": {
-    "functions": {
-      "api/contact.js": {
-        "runtime": "vercel-node@22.x"
-      }
-    }
   }
 }

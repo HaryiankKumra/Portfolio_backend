@@ -11,8 +11,8 @@
     }
   ],
   "functions": {
-    "api/**/*.js": {
-      "includeFiles": "node_modules/mongodb/**/*"
+    "api/contact.js": {
+      "runtime": "nodejs22.x"
     }
   }
 }
