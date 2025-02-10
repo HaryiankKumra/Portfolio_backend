@@ -2,21 +2,26 @@
   "name": "final",
   "version": "1.0.0",
   "engines": {
-    "node": "22.x"
+    "node": "22.x" // Ensure your Node.js version is compatible with your dependencies
   },
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "npm install"
+    "start": "node server.js", // Start the server in production
+    "dev": "nodemon server.js", // For local development (optional)
+    "test": "echo 'No tests specified'", // Placeholder for tests
+    "build": "echo 'No build step required'" // Placeholder for build step
   },
-  "type": "module",
+  "type": "module", // Enable ES modules
   "dependencies": {
-    "@google/generative-ai": "^0.21.0",
-    "axios": "^0.27.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "mongodb": "^5.9.2",
-    "mongoose": "^8.9.2",
-    "nodemailer": "^6.9.16"
+    "@google/generative-ai": "^0.21.0", // Gemini API
+    "axios": "^0.27.2", // HTTP client (if needed)
+    "cors": "^2.8.5", // CORS middleware
+    "dotenv": "^16.4.7", // Environment variables
+    "express": "^4.21.2", // Server framework
+    "mongodb": "^5.9.2", // MongoDB driver
+    "mongoose": "^8.9.2", // MongoDB ODM
+    "nodemailer": "^6.9.16" // Email sending
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0" // Optional: For local development
   }
 }
