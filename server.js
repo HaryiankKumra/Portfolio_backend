@@ -10,12 +10,9 @@ dotenv.config(); // Load environment variables
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
-
-// import cors from 'cors';
-
+// CORS Configuration
 const allowedOrigins = [
-  'https://haryiankkumra.vercel.app', 
+  'https://haryiankkumra.vercel.app',
   'http://127.0.0.1:5500',
 ];
 
@@ -34,7 +31,10 @@ app.use(
   })
 );
 
+app.options('*', cors()); // Handle preflight requests
 
+// Body Parsing Middleware
+app.use(express.json());
 
 // MongoDB Connection
 mongoose
@@ -94,13 +94,10 @@ app.post('/api/contact', async (req, res) => {
     // Send email to admin
     const mailOptions = {
       from: `${name} <${email}>`,
-      to: process.env.ADMIN_EMAIL, // Ensure the ADMIN_EMAIL is defined in your .env
+      to: process.env.ADMIN_EMAIL,
       subject: `New Portfolio Message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     };
-
-    // Log mail options to confirm
-    console.log('Sending email with options:', mailOptions);
 
     await transporter.sendMail(mailOptions);
 
@@ -134,9 +131,10 @@ app.post('/api/chatbot', async (req, res) => {
   try {
     console.log('Received message:', message);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const response = await model.generateContent(message); // Just pass the message directly
+    const result = await model.generateContent(message);
+    const response = await result.response;
+    const reply = response.text(); // Extract text from the response
 
-    const reply = response?.generated_text || 'Sorry, I could not understand your message.';
     console.log('Generated response:', reply);
     res.status(200).json({ reply });
   } catch (error) {
