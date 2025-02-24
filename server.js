@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 const allowedOrigins = [
   'https://haryiankkumra.vercel.app',
   'http://127.0.0.1:5500',
-  'http://haryiank.me/Haryiank',
+  'https://haryiank.me',
 ];
 
 app.use(
